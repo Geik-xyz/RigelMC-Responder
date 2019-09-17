@@ -1,0 +1,2 @@
+# RigelMC-SmartRespondBot
+ Bot
