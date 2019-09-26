@@ -16,6 +16,7 @@ import com.geik.chat.hook.rehberRigelMCHook;
 import com.geik.chat.keywords.keywordMessage;
 
 
+
 public class Listeners implements Listener{
 	
 	@SuppressWarnings("unused")
@@ -29,37 +30,47 @@ public class Listeners implements Listener{
 		Player player = e.getPlayer();
 		if (player.hasPermission("essentials.mute")) {
 			publicThings.rehberJoin(player);}
-		if (keywordMessage.botDefault.contains(player.getName())) {
-			keywordMessage.botDefault.removeIf( name -> name.contains(player.getName()));
-			player.sendMessage(keywordMessage.botDefault.toString());}
+		
+		if (keywordMessage.botDefault.stream().filter( s -> s.contains(player.getName())) != null) {
+			keywordMessage.botDefault.removeIf( name -> name.contains(player.getName()));}
 	}
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
 		Player player = e.getPlayer();
-		if (keywordMessage.botDefault.contains(player.getName())) {
-			keywordMessage.botDefault.removeIf( s -> s.equals(player.getName()));}
+		if (keywordMessage.botDefault.stream().filter( s -> s.contains(player.getName())) != null) {
+			keywordMessage.botDefault.removeIf( name -> name.contains(player.getName()));}
 	}
 	
 	@EventHandler
 	public void chatEvent(AsyncPlayerChatEvent e) {
 		Player player = e.getPlayer();
-		
 		/*
 		 * ETIKETLEME
 		 * @author Geik
 		 * 
 		 */
-		String suffix = Main.chat.getPlayerSuffix(player);
-		String mesaj = e.getMessage().toLowerCase();
-		for (Player p : Bukkit.getOnlinePlayers()) {
-		  if (!(p.hasPermission("etiket.bypass"))) {
-			if (mesaj.contains(p.getName().toLowerCase())) {
-				String newMessage = mesaj.replace(p.getName().toLowerCase(), "§b@" + p.getName() + Main.color(suffix));
-				e.setMessage(newMessage);
-				publicThings.tagged(player, p);
-				p.getWorld().playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2.0F, 0.9F);}
-			}
-		  }
+				String suffix = Main.chat.getPlayerSuffix(player);
+				String mesaj = e.getMessage().toLowerCase();
+				for (Player p : Bukkit.getOnlinePlayers()) {
+				  if (!(p.hasPermission("etiket.bypass"))) {
+					if (mesaj.contains(p.getName().toLowerCase())) {
+						String newMessage = mesaj.replace(p.getName().toLowerCase(), "§b@" + p.getName() + Main.color(suffix));
+						e.setMessage(newMessage);
+						publicThings.tagged(player, p);
+						p.playSound(p.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 2.0F, 0.9F);}
+					else if (mesaj.contains("rehber") || mesaj.contains("rehper")){
+								String newMessage = mesaj.replace("rehber", "§2@Rehber" + Main.color(suffix)).replace("rehper", Main.color("&2@Rehber" + Main.color(suffix)));
+								e.setMessage(newMessage);
+								String join = String.join(",", Main.chat.getPlayerGroups(p));
+								if (join.contains("rehber")) {
+									publicThings.tagged(player, p);
+					}
+				  }
+				  }
+				}
+						
+					
+				
 		
 		/*
 		 * WORD REPLACER
@@ -99,7 +110,5 @@ public class Listeners implements Listener{
 		
 		
 	}
-	
-	
 
 }

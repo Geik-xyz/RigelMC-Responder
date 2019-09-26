@@ -11,10 +11,10 @@ import com.geik.chat.Main;
 
 public class keywordMessage {
 	
-	public static List<String> botDefault = new ArrayList<String>();
+	public static List<String> botDefault = new ArrayList<>();
 	
 	public static void rigelSaysEveryone(Player player, String message1, String message2, String message3, String message4) {
-	//	if (!player.hasPermission("essentials.mute")) {
+		if (!player.hasPermission("essentials.mute")) {
 			defaultSchedulerMessage(20, player, message1);
 			if (message2 != null) {
 				defaultSchedulerMessage(90, player, message2);}
@@ -22,7 +22,7 @@ public class keywordMessage {
 				defaultSchedulerMessage(140, player, message3);}
 			if (message4 != null) {
 				defaultSchedulerMessage(180, player, message4);}
-	//	}
+		}
 		
 	}
 	public static void defaultSchedulerMessage(int time, Player player, String msj) {
@@ -34,9 +34,9 @@ public class keywordMessage {
 	{
 		defaultKeywords event = new defaultKeywords(listenWord, e.getMessage());
 		if (e.getMessage().contains(event.detected())) {
-			if (!botDefault.contains(player.getName() + "." + listenWord)) {
+			if (!botDefault.contains(player.getName())) {
 				keywordMessage.rigelSaysEveryone(player, message1, message2, message3, message4);
-			botDefault.add(player.getName() + "." + listenWord);
+				botDefault.add(player.getName() + "." + listenWord);
 			}
 		}
 	}
